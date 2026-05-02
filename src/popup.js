@@ -30,6 +30,11 @@ function initializeEventListeners() {
   document.getElementById("exportBtn").addEventListener("click", exportData);
   document.getElementById("importBtn").addEventListener("click", importData);
   document.getElementById("clearBtn").addEventListener("click", clearAllData);
+  const sampleBtn = document.getElementById("sampleBtn");
+  if (sampleBtn) sampleBtn.addEventListener("click", downloadSampleData);
+  document
+    .getElementById("fileInput")
+    .addEventListener("change", handleFileImport);
   document
     .getElementById("fileInput")
     .addEventListener("change", handleFileImport);
@@ -207,9 +212,9 @@ function createEnvItem(env, projectId) {
   envMeta.appendChild(colorMarker);
   envMeta.appendChild(statusBadge);
 
+  info.appendChild(envMeta);
   info.appendChild(envName);
   info.appendChild(envUrl);
-  info.appendChild(envMeta);
 
   const actions = document.createElement("div");
   actions.className = "env-actions";
@@ -428,6 +433,51 @@ function exportData() {
   link.click();
   URL.revokeObjectURL(url);
   showNotification("Data exported successfully!");
+}
+
+function getSampleData() {
+  return [
+    {
+      id: "sample-project",
+      name: "Example Project",
+      environments: [
+        {
+          id: "env-prod",
+          name: "Production",
+          url: "https://prod.example.com",
+          color: "#16a34a",
+          active: true,
+        },
+        {
+          id: "env-dev",
+          name: "Development",
+          url: "https://dev.example.com",
+          color: "#2563eb",
+          active: false,
+        },
+        {
+          id: "env-uat",
+          name: "UAT",
+          url: "https://uat.example.com",
+          color: "#f59e0b",
+          active: false,
+        },
+      ],
+    },
+  ];
+}
+
+function downloadSampleData() {
+  const sampleProjects = getSampleData();
+  const dataStr = JSON.stringify(sampleProjects, null, 2);
+  const dataBlob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(dataBlob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "project-env-manager-sample.json";
+  link.click();
+  URL.revokeObjectURL(url);
+  showNotification("Sample file downloaded!");
 }
 
 // Import data
