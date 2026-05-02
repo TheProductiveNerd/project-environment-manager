@@ -1,0 +1,190 @@
+/* Project Environment Manager Styles */
+
+@keyframes pemBlink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+#pem-floating-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2147483647;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#pem-floating-btn {
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 5px 15px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 0 0 18px 18px;
+  color: white;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(102, 126, 234, 0.25);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  pointer-events: auto;
+}
+
+#pem-floating-btn > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+#pem-floating-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 32px rgba(102, 126, 234, 0.3);
+}
+
+.pem-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #4ade80;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+  animation: pemBlink 1.6s infinite;
+  flex-shrink: 0;
+}
+
+.pem-label {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  color: white;
+  font-size: 13px;
+}
+
+.pem-chevron {
+  margin-left: auto;
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+#pem-floating-dropdown {
+  position: relative;
+  top: 50px;
+  width: 280px;
+  max-width: calc(100vw - 40px);
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+  z-index: 2147483646;
+  padding: 12px;
+  display: none;
+  overflow: hidden;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #111827;
+}
+
+#pem-floating-dropdown.visible {
+  display: block;
+}
+
+.pem-dropdown-header {
+  font-weight: 700;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.pem-copy-btn {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: #f4f6ff;
+  color: #1f2937;
+  text-align: left;
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background 0.2s ease;
+}
+
+.pem-copy-btn:hover {
+  background: #e8ecff;
+}
+
+.pem-switch-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pem-env-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: #111827;
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s ease;
+}
+
+.pem-env-item:not(.current):hover {
+  background: #f8fafc;
+}
+
+.pem-env-item.current {
+  background: #eef2ff;
+  color: #1e3a8a;
+  cursor: default;
+}
+
+.pem-current-badge {
+  opacity: 0.7;
+  font-size: 12px;
+}
+
+.pem-status-badge {
+  margin-left: 8px;
+  font-size: 11px;
+  opacity: 0.8;
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 10px;
+  color: #666;
+}
+
+.pem-status-badge.online {
+  background: #e6f4ea;
+  color: #1f7a3f;
+}
+
+.pem-status-badge.offline {
+  background: #ffe5e5;
+  color: #c53030;
+}
