@@ -272,7 +272,6 @@ function addProject() {
   projects.push(newProject);
   saveProjects();
   input.value = "";
-  renderProjects();
 }
 
 // Delete project
