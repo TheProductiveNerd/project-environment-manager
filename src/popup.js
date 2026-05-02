@@ -214,6 +214,9 @@ function createEnvItem(env, projectId) {
   const actions = document.createElement("div");
   actions.className = "env-actions";
 
+  const actionsChild = document.createElement("div");
+  actionsChild.className = "env-actions-container";
+
   const duplicateBtn = document.createElement("button");
   duplicateBtn.className = "btn btn-sm btn-secondary";
   duplicateBtn.textContent = "📄 Duplicate";
@@ -233,9 +236,11 @@ function createEnvItem(env, projectId) {
     deleteEnvironment(projectId, env.id),
   );
 
-  actions.appendChild(duplicateBtn);
-  actions.appendChild(editBtn);
-  actions.appendChild(deleteBtn);
+  actionsChild.appendChild(duplicateBtn);
+  actionsChild.appendChild(editBtn);
+  actionsChild.appendChild(deleteBtn);
+
+  actions.appendChild(actionsChild);
 
   item.appendChild(info);
   item.appendChild(actions);

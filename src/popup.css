@@ -275,9 +275,9 @@ body {
   border-radius: 6px;
   padding: 12px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   transition: all 0.2s ease;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .env-item:hover {
@@ -297,7 +297,7 @@ body {
 }
 
 .env-url {
-  font-size: 12px;
+  font-size: 14px;
   color: #666;
   word-break: break-all;
   font-family: "Courier New", monospace;
@@ -306,7 +306,7 @@ body {
 .env-actions {
   display: flex;
   gap: 6px;
-  margin-left: 8px;
+  justify-content: flex-end;
 }
 
 .env-actions .btn {
@@ -589,4 +589,9 @@ body {
 
 .pulse {
   animation: pulse 2s infinite;
+}
+
+.env-actions-container {
+  display: flex;
+  gap: 5px;
 }
