@@ -147,11 +147,17 @@ function createProjectCard(project) {
   const actions = document.createElement("div");
   actions.className = "project-actions";
 
+  const addEnvBtn = document.createElement("button");
+  addEnvBtn.className = "btn btn-sm btn-primary";
+  addEnvBtn.textContent = "+ Environment";
+  addEnvBtn.addEventListener("click", () => openModal(project.id, null));
+
   const deleteBtn = document.createElement("button");
   deleteBtn.className = "btn btn-sm btn-danger";
-  deleteBtn.textContent = "🗑️ Delete";
+  deleteBtn.textContent = "Delete";
   deleteBtn.addEventListener("click", () => deleteProject(project.id));
 
+  actions.appendChild(addEnvBtn);
   actions.appendChild(deleteBtn);
   header.appendChild(name);
   header.appendChild(actions);
@@ -168,13 +174,7 @@ function createProjectCard(project) {
     });
   }
 
-  const addEnvBtn = document.createElement("button");
-  addEnvBtn.className = "btn btn-secondary add-env-btn";
-  addEnvBtn.textContent = "+ Add Environment";
-  addEnvBtn.addEventListener("click", () => openModal(project.id, null));
-
   envSection.appendChild(environments);
-  envSection.appendChild(addEnvBtn);
 
   card.appendChild(header);
   card.appendChild(envSection);
@@ -224,19 +224,19 @@ function createEnvItem(env, projectId) {
 
   const duplicateBtn = document.createElement("button");
   duplicateBtn.className = "btn btn-sm btn-secondary";
-  duplicateBtn.textContent = "📄 Duplicate";
+  duplicateBtn.textContent = "Duplicate";
   duplicateBtn.addEventListener("click", () => {
     duplicateEnvironment(projectId, env.id);
   });
 
   const editBtn = document.createElement("button");
   editBtn.className = "btn btn-sm btn-secondary";
-  editBtn.textContent = "✏️ Edit";
+  editBtn.textContent = "Edit";
   editBtn.addEventListener("click", () => openModal(projectId, env.id));
 
   const deleteBtn = document.createElement("button");
   deleteBtn.className = "btn btn-sm btn-danger";
-  deleteBtn.textContent = "🗑️ Delete";
+  deleteBtn.textContent = "Delete";
   deleteBtn.addEventListener("click", () =>
     deleteEnvironment(projectId, env.id),
   );

@@ -237,6 +237,7 @@ body {
   margin-bottom: 14px;
   padding-bottom: 12px;
   border-bottom: 1px solid #f0f0f0;
+  gap: 20px;
 }
 
 .project-name {
@@ -246,6 +247,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  word-break: break-all;
 }
 
 .project-name::before {
@@ -323,10 +325,6 @@ body {
 
 .env-actions .btn-secondary:hover {
   background: #f5f5f5;
-}
-
-.add-env-btn {
-  width: 100%;
 }
 
 /* Empty State */
