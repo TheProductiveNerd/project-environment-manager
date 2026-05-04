@@ -77,16 +77,23 @@
   function injectFloatingBar(matchingEnv) {
     const currentEnv =
       matchingEnv.allEnvs.find((env) => env.id === matchingEnv.envId) || {};
-    const blinkColor = currentEnv.color || "#4ade80";
-    const shadowColor = hexToRgba(blinkColor, 0.6);
+
+    console.log("Current environment details:", currentEnv);
+
+    const badgeIndicatorColor = currentEnv.badgeIndicatorColor;
+    const shadowColor = hexToRgba(badgeIndicatorColor, 0.6);
+
+    const badgeBackgroundColor = currentEnv.badgeBackgroundColor;
+    const badgeFontColor = currentEnv.badgeFontColor;
+
     const indicatorClasses =
       currentEnv.active === false ? "pem-indicator inactive" : "pem-indicator";
 
     const html = `
       <div id="pem-floating-wrapper">
-        <button id="pem-floating-btn" type="button">
-          <span class="${indicatorClasses}" style="background: ${blinkColor}; box-shadow: 0 0 10px ${shadowColor};"></span>
-          <span class="pem-label"><strong>${matchingEnv.envName}</strong></span>
+        <button style="background: ${badgeBackgroundColor};" id="pem-floating-btn" type="button">
+          <span class="${indicatorClasses}" style="background: ${badgeIndicatorColor}; box-shadow: 0 0 10px ${shadowColor};"></span>
+          <span class="pem-label" style="color: ${badgeFontColor};">${matchingEnv.envName}</span>
           <span class="pem-chevron">▾</span>
         </button>
         <div id="pem-floating-dropdown">

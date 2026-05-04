@@ -101,7 +101,6 @@ body {
   font-size: 14px;
   transition: all 0.3s ease;
   font-family: inherit;
-  margin-bottom: 12px;
 }
 
 .input-field:focus {
@@ -160,13 +159,13 @@ body {
 }
 
 .btn-danger {
-  background: #ff6b6b;
+  background: #c53030;
   color: white;
   width: 100%;
 }
 
 .btn-danger:hover {
-  background: #ff5252;
+  background: #c53030;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
 }
@@ -177,12 +176,12 @@ body {
 }
 
 .btn-sm.btn-danger {
-  background: #ff6b6b;
+  background: #c53030;
   color: white;
 }
 
 .btn-sm.btn-danger:hover {
-  background: #ff5252;
+  background: #c53030;
 }
 
 .btn-sm.btn-secondary {
@@ -197,6 +196,7 @@ body {
 /* Add Section */
 .add-section {
   display: flex;
+  flex-direction: column;
   gap: 8px;
   margin-bottom: 20px;
 }
@@ -544,7 +544,7 @@ body {
 .modal-body {
   padding: 20px;
   display: grid;
-  gap: 12px;
+  gap: 8px;
 }
 
 .modal-footer {
@@ -595,4 +595,32 @@ body {
 .env-actions-container {
   display: flex;
   gap: 5px;
+}
+
+.about-description {
+  padding: 15px 0px;
+  margin: 10px 0px;
+  font-size: 14px;
+}
+
+.add-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.error-message {
+  display: none;
+  color: #c53030;
+  padding-left: 10px;
+  font-size: 13px;
+}
+
+.color-picker-container {
+  display: flex;
+  gap: 8px;
+}
+
+.color-picker-container > div {
+  width: 100%;
 }

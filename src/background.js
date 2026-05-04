@@ -63,7 +63,9 @@ function findMatchingEnvironment(projects, currentUrl) {
                 envUrl: env.url,
                 currentPath: currentPath,
                 allEnvs: project.environments,
-                color: env.color || "#000000",
+                badgeBackgroundColor: env.badgeBackgroundColor,
+                badgeIndicatorColor: env.badgeIndicatorColor,
+                badgeFontColor: env.badgeFontColor,
               };
             }
           } catch (e) {
@@ -88,7 +90,8 @@ chrome.tabs.onActivated.addListener((activeInfo) => {
 
       if (matchingEnv) {
         chrome.action.setBadgeText({ text: "✓", tabId: activeInfo.tabId });
-        chrome.action.setBadgeBackgroundColor({ color: matchingEnv.color });
+        chrome.action.setBadgeBackgroundColor({ color: matchingEnv.badgeIndicatorColor });
+        chrome.action.setBadgeTextColor({ color: matchingEnv.badgeFontColor });
       } else {
         chrome.action.setBadgeText({ text: "", tabId: activeInfo.tabId });
       }
@@ -105,7 +108,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
       if (matchingEnv) {
         chrome.action.setBadgeText({ text: "✓", tabId });
-        chrome.action.setBadgeBackgroundColor({ color: matchingEnv.color });
+        chrome.action.setBadgeBackgroundColor({ color: matchingEnv.badgeIndicatorColor });
+        chrome.action.setBadgeTextColor({ color: matchingEnv.badgeFontColor });
       } else {
         chrome.action.setBadgeText({ text: "", tabId });
       }

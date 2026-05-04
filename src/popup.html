@@ -25,20 +25,26 @@
       <div class="tabs">
         <button class="tab-btn active" data-tab="projects">Projects</button>
         <button class="tab-btn" data-tab="settings">Settings</button>
+        <button class="tab-btn" data-tab="about">About</button>
       </div>
 
       <!-- Projects Tab -->
       <div id="projects" class="tab-content active">
         <div class="add-section">
-          <input
-            type="text"
-            id="projectInput"
-            placeholder="Enter new project name..."
-            class="input-field"
-          />
-          <button id="addProjectBtn" class="btn btn-primary">
-            <span class="btn-icon">+</span> Project
-          </button>
+          <div class="add-section-header">
+            <input
+              type="text"
+              id="projectInput"
+              placeholder="Enter new project name..."
+              class="input-field"
+            />
+            <button id="addProjectBtn" class="btn btn-primary">
+              <span class="btn-icon">+</span> Project
+            </button>
+          </div>
+          <div id="projectError" class="error-message">
+            <p>Project name cannot be empty or duplicate.</p>
+          </div>
         </div>
 
         <div id="projectsContainer" class="projects-container">
@@ -54,7 +60,7 @@
       <!-- Settings Tab -->
       <div id="settings" class="tab-content">
         <div class="settings-section">
-          <h3>Data Management</h3>
+          <h2>Data Management</h2>
           <button id="exportBtn" class="btn btn-secondary">
             📥 Export Data
           </button>
@@ -62,7 +68,7 @@
             📤 Import Data
           </button>
           <button id="sampleBtn" class="btn btn-secondary">
-            📥 Download Sample file
+            📥 Download Sample Import File
           </button>
           <button id="clearBtn" class="btn btn-danger">
             🗑️ Clear All Data
@@ -75,6 +81,37 @@
             <li>Import previously exported data</li>
             <li>Clear all data will remove all projects and environments</li>
           </ul>
+        </div>
+      </div>
+
+      <div id="about" class="tab-content">
+        <div class="about-section">
+          <h2>About Project Environment Manager</h2>
+          <p class="about-description">
+            Project Environment Manager is a Chrome extension designed to help
+            developers manage multiple project environments efficiently.
+          </p>
+          <div class="settings-info">
+            <p>
+              <strong>Features:</strong>
+            </p>
+            <ul>
+              <li>Create and manage multiple project environments</li>
+              <li>Switch between environments quickly</li>
+              <li>Export and import project data</li>
+              <li>Customize environment indicators</li>
+            </ul>
+          </div>
+          <p class="about-description">
+            <strong>Developer:</strong> Gaurav Khandelwal
+            <br />
+            <strong>GitHub Repository:</strong>
+            <a
+              href="https://github.com/gauravtech13/project-env-manager"
+              target="_blank"
+              >gauravtech13/project-env-manager</a
+            >
+          </p>
         </div>
       </div>
     </div>
@@ -93,19 +130,52 @@
             placeholder="Environment name (e.g., Development)"
             class="input-field"
           />
+          <div id="envNameError" class="error-message">
+            <p>Environment name cannot be empty.</p>
+          </div>
           <input
             type="url"
             id="envUrl"
             placeholder="Environment URL (https://example.com)"
             class="input-field"
           />
-          <label class="modal-label" for="envColor">Indicator color</label>
-          <input
-            type="color"
-            id="envColor"
-            value="#4ade80"
-            class="input-field color-input"
-          />
+          <div id="envUrlError" class="error-message">
+            <p>Environment URL cannot be empty.</p>
+          </div>
+          <label class="modal-label">Customize Badge Colors</label>
+          <div class="color-picker-container">
+            <div>
+              <label class="modal-label" for="badgeBackgroundColor"
+                >Background</label
+              >
+              <input
+                type="color"
+                id="badgeBackgroundColor"
+                class="input-field color-input"
+                data-env_background_default_color="#000000"
+              />
+            </div>
+            <div>
+              <label class="modal-label" for="badgeIndicatorColor"
+                >Indicator</label
+              >
+              <input
+                type="color"
+                id="badgeIndicatorColor"
+                class="input-field color-input"
+                data-env_indicator_default_color="#4ade80"
+              />
+            </div>
+            <div>
+              <label class="modal-label" for="badgeFontColor">Font</label>
+              <input
+                type="color"
+                id="badgeFontColor"
+                class="input-field color-input"
+                data-env_font_default_color="#ffffff"
+              />
+            </div>
+          </div>
           <label class="status-label">
             <input type="checkbox" id="envActive" checked /> Active
           </label>

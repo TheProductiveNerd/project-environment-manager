@@ -203,7 +203,7 @@ function createEnvItem(env, projectId) {
 
   const colorMarker = document.createElement("span");
   colorMarker.className = "env-color-marker";
-  colorMarker.style.background = env.color || "#4ade80";
+  colorMarker.style.background = env.color;
 
   const statusBadge = document.createElement("span");
   statusBadge.className = `env-status ${env.active ? "active" : "inactive"}`;
@@ -255,11 +255,12 @@ function createEnvItem(env, projectId) {
 
 // Add project
 function addProject() {
+  document.getElementById("projectError").style.display = "none";
   const input = document.getElementById("projectInput");
   const name = input.value.trim();
 
   if (!name) {
-    alert("Please enter a project name");
+    document.getElementById("projectError").style.display = "block";
     return;
   }
 
@@ -291,13 +292,17 @@ function openModal(projectId, envId) {
   const modalTitle = document.getElementById("modalTitle");
   const envNameInput = document.getElementById("envName");
   const envUrlInput = document.getElementById("envUrl");
-  const envColorInput = document.getElementById("envColor");
+  const badgeBackgroundColorInput = document.getElementById("badgeBackgroundColor");
+  const badgeIndicatorColorInput = document.getElementById("badgeIndicatorColor");
+  const badgeFontColorInput = document.getElementById("badgeFontColor");
   const envActiveInput = document.getElementById("envActive");
 
   // Clear inputs
   envNameInput.value = "";
   envUrlInput.value = "";
-  envColorInput.value = "#4ade80";
+  badgeIndicatorColorInput.value = badgeIndicatorColorInput.dataset.env_indicator_default_color;
+  badgeBackgroundColorInput.value = badgeBackgroundColorInput.dataset.env_background_default_color;
+  badgeFontColorInput.value = badgeFontColorInput.dataset.env_font_default_color;
   envActiveInput.checked = true;
 
   if (envId) {
@@ -308,7 +313,9 @@ function openModal(projectId, envId) {
     modalTitle.textContent = "Edit Environment";
     envNameInput.value = env.name;
     envUrlInput.value = env.url;
-    envColorInput.value = env.color || "#4ade80";
+    badgeBackgroundColorInput.value = env.badgeBackgroundColor;
+    badgeIndicatorColorInput.value = env.badgeIndicatorColor;
+    badgeFontColorInput.value = env.badgeFontColor;
     envActiveInput.checked = env.active !== false;
   } else {
     // Add mode
@@ -335,24 +342,35 @@ function closeModal() {
 function saveEnvironment() {
   const name = document.getElementById("envName").value.trim();
   const url = document.getElementById("envUrl").value.trim();
-  const color = document.getElementById("envColor").value;
+  const badgeIndicatorColor = document.getElementById("badgeIndicatorColor").value;
+  const badgeBackgroundColor = document.getElementById("badgeBackgroundColor").value;
+  const badgeFontColor = document.getElementById("badgeFontColor").value;
   const active = document.getElementById("envActive").checked;
 
+  document.getElementById("envNameError").style.display = "none";
+  document.getElementById("envUrlError").style.display = "none";
+
+  let isError = false;
+
   if (!name) {
-    alert("Please enter an environment name");
-    return;
+    document.getElementById("envNameError").style.display = "block";
+    isError = true;
   }
 
   if (!url) {
-    alert("Please enter a valid URL");
-    return;
+    document.getElementById("envUrlError").style.display = "block";
+    isError = true;
   }
 
   // Validate URL format
   try {
     new URL(url);
   } catch {
-    alert("Please enter a valid URL (e.g., https://example.com)");
+    document.getElementById("envUrlError").style.display = "block";
+    isError = true;
+  }
+
+  if (isError) {
     return;
   }
 
@@ -367,7 +385,9 @@ function saveEnvironment() {
     const env = project.environments.find((e) => e.id === editingEnvId);
     env.name = name;
     env.url = url;
-    env.color = color;
+    env.badgeBackgroundColor = badgeBackgroundColor;
+    env.badgeIndicatorColor = badgeIndicatorColor;
+    env.badgeFontColor = badgeFontColor;
     env.active = active;
   } else {
     // Add new
@@ -375,7 +395,9 @@ function saveEnvironment() {
       id: Date.now().toString(),
       name: name,
       url: url,
-      color: color,
+      badgeBackgroundColor: badgeBackgroundColor,
+      badgeIndicatorColor: badgeIndicatorColor,
+      badgeFontColor: badgeFontColor,
       active: active,
     });
   }
@@ -405,7 +427,7 @@ function duplicateEnvironment(projectId, envId) {
     id: Date.now().toString(),
     name: `${env.name} (copy)`,
     url: env.url,
-    color: env.color || "#4ade80",
+    color: env.color,
     active: env.active !== false,
   };
 
