@@ -203,7 +203,7 @@ function createEnvItem(env, projectId) {
 
   const colorMarker = document.createElement("span");
   colorMarker.className = "env-color-marker";
-  colorMarker.style.background = env.color;
+  colorMarker.style.background = env.badgeIndicatorColor;
 
   const statusBadge = document.createElement("span");
   statusBadge.className = `env-status ${env.active ? "active" : "inactive"}`;
