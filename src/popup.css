@@ -122,8 +122,6 @@ body {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
   gap: 8px;
   white-space: nowrap;
 }
@@ -234,9 +232,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 14px;
+  /* margin-bottom: 14px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0; */
   gap: 20px;
 }
 
@@ -250,11 +248,6 @@ body {
   word-break: break-all;
 }
 
-.project-name::before {
-  content: "📁";
-  font-size: 18px;
-}
-
 .project-actions {
   display: flex;
   gap: 8px;
@@ -264,11 +257,44 @@ body {
   margin: 0;
 }
 
+.project-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin: 0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.project-toggle:hover {
+  background-color: #f0f0f0;
+}
+
+.project-toggle::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 6px solid #666;
+  transition: transform 0.3s ease;
+}
+
+.project-toggle.collapsed::before {
+  transform: rotate(180deg);
+}
+
 /* Environments */
 .environments {
   display: grid;
   gap: 10px;
-  margin-bottom: 12px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+  /* margin-bottom: 12px; */
 }
 
 .env-item {
@@ -649,8 +675,9 @@ body {
 
 .footer {
   padding: 10px;
-  text-align: center;
   font-size: 12px;
   flex-shrink: 0;
   border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
 }

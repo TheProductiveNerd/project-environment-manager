@@ -49,12 +49,8 @@ function findMatchingEnvironment(projects, currentUrl) {
       if (project.environments) {
         for (const env of project.environments) {
           try {
-            const envUrlObj = new URL(env.url);
-            const envBase = envUrlObj.origin;
-            const currentBase = currentUrlObj.origin;
-
-            // Check if current page matches this environment's base URL
-            if (currentBase === envBase) {
+            // Check if current page matches this environment's URL
+            if (env.active && currentUrl.startsWith(env.url)) {
               return {
                 projectId: project.id,
                 projectName: project.name,
@@ -81,38 +77,51 @@ function findMatchingEnvironment(projects, currentUrl) {
   return null;
 }
 
-// Handle badge updates (optional: show number of matching envs)
+function updateBadgeForTabUrl(tabId, url) {
+  if (!url) {
+    chrome.action.setBadgeText({ text: "", tabId });
+    return;
+  }
+
+  chrome.storage.sync.get(STORAGE_KEY, (result) => {
+    const projects = result[STORAGE_KEY] || [];
+    const matchingEnv = findMatchingEnvironment(projects, url);
+
+    if (matchingEnv) {
+      chrome.action.setBadgeText({ text: "✓", tabId });
+      chrome.action.setBadgeBackgroundColor({ color: matchingEnv.badgeIndicatorColor });
+      chrome.action.setBadgeTextColor({ color: matchingEnv.badgeFontColor });
+    } else {
+      chrome.action.setBadgeText({ text: "", tabId });
+    }
+  });
+}
+
+// Handle badge updates when the active tab changes
 chrome.tabs.onActivated.addListener((activeInfo) => {
   chrome.tabs.get(activeInfo.tabId, (tab) => {
-    chrome.storage.sync.get(STORAGE_KEY, (result) => {
-      const projects = result[STORAGE_KEY] || [];
-      const matchingEnv = findMatchingEnvironment(projects, tab.url);
-
-      if (matchingEnv) {
-        chrome.action.setBadgeText({ text: "✓", tabId: activeInfo.tabId });
-        chrome.action.setBadgeBackgroundColor({ color: matchingEnv.badgeIndicatorColor });
-        chrome.action.setBadgeTextColor({ color: matchingEnv.badgeFontColor });
-      } else {
-        chrome.action.setBadgeText({ text: "", tabId: activeInfo.tabId });
-      }
-    });
+    updateBadgeForTabUrl(activeInfo.tabId, tab?.url);
   });
 });
 
-// Update badge on URL change
+// Handle full tab navigations
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.status === "complete") {
-    chrome.storage.sync.get(STORAGE_KEY, (result) => {
-      const projects = result[STORAGE_KEY] || [];
-      const matchingEnv = findMatchingEnvironment(projects, tab.url);
-
-      if (matchingEnv) {
-        chrome.action.setBadgeText({ text: "✓", tabId });
-        chrome.action.setBadgeBackgroundColor({ color: matchingEnv.badgeIndicatorColor });
-        chrome.action.setBadgeTextColor({ color: matchingEnv.badgeFontColor });
-      } else {
-        chrome.action.setBadgeText({ text: "", tabId });
-      }
-    });
+  if (changeInfo.url || changeInfo.status === "complete") {
+    updateBadgeForTabUrl(tabId, changeInfo.url || tab?.url);
   }
 });
+
+// Handle SPA route changes triggered by pushState / replaceState
+chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
+  if (details.frameId === 0) {
+    updateBadgeForTabUrl(details.tabId, details.url);
+  }
+});
+
+// Handle hash changes in single-page apps
+chrome.webNavigation.onReferenceFragmentUpdated.addListener((details) => {
+  if (details.frameId === 0) {
+    updateBadgeForTabUrl(details.tabId, details.url);
+  }
+});
+

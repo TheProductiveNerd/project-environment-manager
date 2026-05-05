@@ -134,6 +134,11 @@ function renderProjects() {
 
 // Create project card
 function createProjectCard(project) {
+  // Initialize collapsed state if not present
+  if (project.collapsed === undefined) {
+    project.collapsed = false;
+  }
+
   const card = document.createElement("div");
   card.className = "project-card";
 
@@ -142,7 +147,7 @@ function createProjectCard(project) {
 
   const name = document.createElement("div");
   name.className = "project-name";
-  name.textContent = project.name;
+  name.textContent = "📁 " + project.name;
 
   const actions = document.createElement("div");
   actions.className = "project-actions";
@@ -157,13 +162,21 @@ function createProjectCard(project) {
   deleteBtn.textContent = "Delete";
   deleteBtn.addEventListener("click", () => deleteProject(project.id));
 
+  // Toggle button
+  const toggleBtn = document.createElement("button");
+  toggleBtn.className = "project-toggle";
+  toggleBtn.classList.toggle("collapsed", project.collapsed);
+  toggleBtn.addEventListener("click", () => toggleProject(project.id));
+
   actions.appendChild(addEnvBtn);
   actions.appendChild(deleteBtn);
+  actions.appendChild(toggleBtn);
   header.appendChild(name);
   header.appendChild(actions);
 
   // Environments
   const envSection = document.createElement("div");
+  envSection.style.display = project.collapsed ? "none" : "block";
   const environments = document.createElement("div");
   environments.className = "environments";
 
@@ -279,6 +292,15 @@ function addProject() {
 function deleteProject(projectId) {
   if (confirm("Are you sure you want to delete this project?")) {
     projects = projects.filter((p) => p.id !== projectId);
+    saveProjects();
+  }
+}
+
+// Toggle project collapse
+function toggleProject(projectId) {
+  const project = projects.find((p) => p.id === projectId);
+  if (project) {
+    project.collapsed = !project.collapsed;
     saveProjects();
   }
 }
@@ -424,11 +446,9 @@ function duplicateEnvironment(projectId, envId) {
   }
 
   const duplicatedEnv = {
+    ...env,
     id: Date.now().toString(),
     name: `${env.name} (copy)`,
-    url: env.url,
-    color: env.color,
-    active: env.active !== false,
   };
 
   project.environments.push(duplicatedEnv);
@@ -466,21 +486,27 @@ function getSampleData() {
           id: "env-prod",
           name: "Production",
           url: "https://prod.example.com",
-          color: "#16a34a",
+          badgeIndicatorColor: "#4ade80",
+          badgeBackgroundColor: "#000000",
+          badgeFontColor: "#ffffff",
           active: true,
         },
         {
           id: "env-dev",
           name: "Development",
           url: "https://dev.example.com",
-          color: "#2563eb",
-          active: false,
+          badgeIndicatorColor: "#2563eb",
+          badgeBackgroundColor: "#000000",
+          badgeFontColor: "#ffffff",
+          active: true,
         },
         {
           id: "env-uat",
           name: "UAT",
           url: "https://uat.example.com",
-          color: "#f59e0b",
+          badgeIndicatorColor: "#f59e0b",
+          badgeBackgroundColor: "#000000",
+          badgeFontColor: "#ffffff",
           active: false,
         },
       ],

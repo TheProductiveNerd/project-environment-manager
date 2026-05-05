@@ -47,12 +47,12 @@
     return matchingEnv.allEnvs
       .map((env) => {
         const isCurrent = env.id === currentEnvId;
-        const isInactive = env.active === false;
+        if (env.active === false) return;
+
         const classes = ["pem-env-item"];
         if (isCurrent) classes.push("current");
-        if (isInactive) classes.push("inactive");
 
-        const badgeText = isCurrent ? "Current" : isInactive ? "Inactive" : "";
+        const badgeText = isCurrent ? "Current" : "";
 
         return `
           <button
@@ -60,11 +60,11 @@
             class="${classes.join(" ")}"
             data-env-id="${env.id}"
             data-env-url="${env.url}"
-            ${isCurrent || isInactive ? "disabled" : ""}
+            ${isCurrent ? "disabled" : ""}
           >
             ${env.name}
             ${badgeText ? `<span class="pem-current-badge">${badgeText}</span>` : ""}
-            ${!isCurrent && !isInactive ? '<span class="pem-status-badge">Checking</span>' : ""}
+            ${!isCurrent ? '<span class="pem-status-badge">Checking</span>' : ""}
           </button>
         `;
       })
@@ -175,14 +175,12 @@
     );
 
     otherEnvs.forEach((env) => {
-      const testUrl = new URL(env.url).origin + matchingEnv.currentPath;
-
-      fetch(testUrl, { method: "HEAD" })
+      fetch(env.url, { method: "HEAD" })
         .then((response) => {
-          updateEnvironmentStatus(env.id, response.ok ? "online" : "offline");
+          updateEnvironmentStatus(env.id, response.status);
         })
         .catch(() => {
-          updateEnvironmentStatus(env.id, "offline");
+          updateEnvironmentStatus(env.id, "Error");
         });
     });
   }
@@ -195,8 +193,8 @@
       `[data-env-id="${envId}"] .pem-status-badge`,
     );
     if (statusBadge) {
-      statusBadge.textContent = status === "online" ? "Online" : "Offline";
-      statusBadge.className = `pem-status-badge ${status}`;
+      statusBadge.textContent = status;
+      statusBadge.className = `pem-status-badge ${status >= 200 && status < 300 ? "online" : "offline"}`;
     }
   }
 
@@ -209,16 +207,7 @@
     }
 
     try {
-      const currentUrl = window.location.href;
-      const currentUrlObj = new URL(currentUrl);
-      const targetUrlObj = new URL(targetEnv.url);
-
-      const targetOrigin = targetUrlObj.origin;
-      const currentPath =
-        currentUrlObj.pathname + currentUrlObj.search + currentUrlObj.hash;
-
-      const newUrl = targetOrigin + currentPath;
-      window.location.href = newUrl;
+      window.location.href = targetEnv.url;
     } catch (error) {
       console.error("Error switching environment:", error);
       alert("Unable to switch environment. Invalid URL.");

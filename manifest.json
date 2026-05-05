@@ -3,7 +3,7 @@
   "name": "Project Environment Manager",
   "description": "Manage multiple projects and their environments with ease. Detect, display, and switch between environment URLs.",
   "version": "1.0.0",
-  "permissions": ["storage", "activeTab", "scripting"],
+  "permissions": ["storage", "activeTab", "scripting", "webNavigation"],
   "host_permissions": ["<all_urls>"],
   "action": {
     "default_popup": "src/popup.html",
