@@ -1,18 +1,12 @@
-/**
- * Background Service Worker for Project Environment Manager
- * Handles storage, messaging, and environment detection logic
- */
-
 const STORAGE_KEY = "pem_projects";
 
-// Listen for messages from content scripts and popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "getProjects") {
     chrome.storage.sync.get(STORAGE_KEY, (result) => {
       const projects = result[STORAGE_KEY] || [];
       sendResponse({ projects });
     });
-    return true; // Indicates we'll send response asynchronously
+    return true;
   }
 
   if (request.action === "findMatchingEnv") {
@@ -29,16 +23,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const targetUrl = request.targetUrl;
     const currentPath = request.currentPath;
 
-    // Switch by reloading with new base URL + same path
     const newUrl = targetUrl + currentPath;
 
     sendResponse({ success: true, newUrl });
   }
 });
 
-/**
- * Find matching environment for a given URL
- */
 function findMatchingEnvironment(projects, currentUrl) {
   try {
     const currentUrlObj = new URL(currentUrl);
@@ -49,8 +39,7 @@ function findMatchingEnvironment(projects, currentUrl) {
       if (project.environments) {
         for (const env of project.environments) {
           try {
-            // Check if current page matches this environment's URL
-            if (env.active && currentUrl.startsWith(env.url)) {
+            if (env.active && compareUrls(currentUrl, env.url)) {
               return {
                 projectId: project.id,
                 projectName: project.name,
@@ -77,6 +66,14 @@ function findMatchingEnvironment(projects, currentUrl) {
   return null;
 }
 
+function normalizeUrl(url) {
+  return url.replace(/^(https?:\/\/)?(www\.)?/, "").replace(/\/$/, "").toLowerCase();
+}
+
+function compareUrls(url1, url2) {
+  return normalizeUrl(url1).startsWith(normalizeUrl(url2));
+}
+
 function updateBadgeForTabUrl(tabId, url) {
   if (!url) {
     chrome.action.setBadgeText({ text: "", tabId });
@@ -97,28 +94,24 @@ function updateBadgeForTabUrl(tabId, url) {
   });
 }
 
-// Handle badge updates when the active tab changes
 chrome.tabs.onActivated.addListener((activeInfo) => {
   chrome.tabs.get(activeInfo.tabId, (tab) => {
     updateBadgeForTabUrl(activeInfo.tabId, tab?.url);
   });
 });
 
-// Handle full tab navigations
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.url || changeInfo.status === "complete") {
     updateBadgeForTabUrl(tabId, changeInfo.url || tab?.url);
   }
 });
 
-// Handle SPA route changes triggered by pushState / replaceState
 chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
   if (details.frameId === 0) {
     updateBadgeForTabUrl(details.tabId, details.url);
   }
 });
 
-// Handle hash changes in single-page apps
 chrome.webNavigation.onReferenceFragmentUpdated.addListener((details) => {
   if (details.frameId === 0) {
     updateBadgeForTabUrl(details.tabId, details.url);

@@ -1,24 +1,19 @@
-// Storage keys
 const STORAGE_KEY = "pem_projects";
 
 let projects = [];
 let editingEnvId = null;
 let editingProjectId = null;
 
-// Initialize
 document.addEventListener("DOMContentLoaded", () => {
   loadProjects();
   initializeEventListeners();
 });
 
-// Event Listeners
 function initializeEventListeners() {
-  // Tab switching
   document.querySelectorAll(".tab-btn").forEach((btn) => {
     btn.addEventListener("click", switchTab);
   });
 
-  // Projects tab
   document
     .getElementById("addProjectBtn")
     .addEventListener("click", addProject);
@@ -26,7 +21,6 @@ function initializeEventListeners() {
     if (e.key === "Enter") addProject();
   });
 
-  // Settings tab
   document.getElementById("exportBtn").addEventListener("click", exportData);
   document.getElementById("importBtn").addEventListener("click", importData);
   document.getElementById("clearBtn").addEventListener("click", clearAllData);
@@ -39,7 +33,6 @@ function initializeEventListeners() {
     .getElementById("fileInput")
     .addEventListener("change", handleFileImport);
 
-  // Modal
   document.querySelector(".modal-close").addEventListener("click", closeModal);
   document.getElementById("modalCancel").addEventListener("click", closeModal);
   document
@@ -50,24 +43,20 @@ function initializeEventListeners() {
   });
 }
 
-// Tab switching
 function switchTab(e) {
   const tabName = e.target.dataset.tab;
 
-  // Update buttons
   document.querySelectorAll(".tab-btn").forEach((btn) => {
     btn.classList.remove("active");
   });
   e.target.classList.add("active");
 
-  // Update content
   document.querySelectorAll(".tab-content").forEach((content) => {
     content.classList.remove("active");
   });
   document.getElementById(tabName).classList.add("active");
 }
 
-// Load projects from storage
 function loadProjects() {
   chrome.storage.sync.get(STORAGE_KEY, (result) => {
     projects = result[STORAGE_KEY] || [];
@@ -75,7 +64,6 @@ function loadProjects() {
   });
 }
 
-// Render projects
 function renderProjects() {
   const container = document.getElementById("projectsContainer");
   const emptyState = document.getElementById("emptyState");
@@ -89,12 +77,10 @@ function renderProjects() {
 
   emptyState.style.display = "none";
 
-  // Get current tab URL to check for matching environments
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     const currentUrl = tabs[0]?.url;
     let matchingProjectId = null;
 
-    // Find project with matching environment
     if (currentUrl) {
       for (const project of projects) {
         if (project.environments) {
@@ -107,7 +93,6 @@ function renderProjects() {
                 break;
               }
             } catch (e) {
-              // Invalid URL, continue
             }
           }
           if (matchingProjectId) break;
@@ -115,13 +100,10 @@ function renderProjects() {
       }
     }
 
-    // Sort projects: matching project first, then by creation time (most recent first)
     const sortedProjects = [...projects].sort((a, b) => {
-      // If a project matches current URL, it comes first
       if (a.id === matchingProjectId) return -1;
       if (b.id === matchingProjectId) return 1;
 
-      // Otherwise sort by creation time (most recent first)
       return parseInt(b.id) - parseInt(a.id);
     });
 
@@ -132,9 +114,7 @@ function renderProjects() {
   });
 }
 
-// Create project card
 function createProjectCard(project) {
-  // Initialize collapsed state if not present
   if (project.collapsed === undefined) {
     project.collapsed = false;
   }
@@ -162,7 +142,6 @@ function createProjectCard(project) {
   deleteBtn.textContent = "Delete";
   deleteBtn.addEventListener("click", () => deleteProject(project.id));
 
-  // Toggle button
   const toggleBtn = document.createElement("button");
   toggleBtn.className = "project-toggle";
   toggleBtn.classList.toggle("collapsed", project.collapsed);
@@ -174,7 +153,6 @@ function createProjectCard(project) {
   header.appendChild(name);
   header.appendChild(actions);
 
-  // Environments
   const envSection = document.createElement("div");
   envSection.style.display = project.collapsed ? "none" : "block";
   const environments = document.createElement("div");
@@ -195,7 +173,6 @@ function createProjectCard(project) {
   return card;
 }
 
-// Create environment item
 function createEnvItem(env, projectId) {
   const item = document.createElement("div");
   item.className = "env-item";
@@ -235,6 +212,13 @@ function createEnvItem(env, projectId) {
   const actionsChild = document.createElement("div");
   actionsChild.className = "env-actions-container";
 
+  const openBtn = document.createElement("button");
+  openBtn.className = "btn btn-sm btn-secondary";
+  openBtn.textContent = "Open";
+  openBtn.addEventListener("click", () => {
+    chrome.tabs.create({ url: env.url });
+  });
+
   const duplicateBtn = document.createElement("button");
   duplicateBtn.className = "btn btn-sm btn-secondary";
   duplicateBtn.textContent = "Duplicate";
@@ -254,6 +238,7 @@ function createEnvItem(env, projectId) {
     deleteEnvironment(projectId, env.id),
   );
 
+  actionsChild.appendChild(openBtn);
   actionsChild.appendChild(duplicateBtn);
   actionsChild.appendChild(editBtn);
   actionsChild.appendChild(deleteBtn);
@@ -266,7 +251,6 @@ function createEnvItem(env, projectId) {
   return item;
 }
 
-// Add project
 function addProject() {
   document.getElementById("projectError").style.display = "none";
   const input = document.getElementById("projectInput");
@@ -288,7 +272,6 @@ function addProject() {
   input.value = "";
 }
 
-// Delete project
 function deleteProject(projectId) {
   if (confirm("Are you sure you want to delete this project?")) {
     projects = projects.filter((p) => p.id !== projectId);
@@ -296,7 +279,6 @@ function deleteProject(projectId) {
   }
 }
 
-// Toggle project collapse
 function toggleProject(projectId) {
   const project = projects.find((p) => p.id === projectId);
   if (project) {
@@ -305,7 +287,6 @@ function toggleProject(projectId) {
   }
 }
 
-// Open modal
 function openModal(projectId, envId) {
   editingProjectId = projectId;
   editingEnvId = envId;
@@ -319,7 +300,6 @@ function openModal(projectId, envId) {
   const badgeFontColorInput = document.getElementById("badgeFontColor");
   const envActiveInput = document.getElementById("envActive");
 
-  // Clear inputs
   envNameInput.value = "";
   envUrlInput.value = "";
   badgeIndicatorColorInput.value = badgeIndicatorColorInput.dataset.env_indicator_default_color;
@@ -328,7 +308,6 @@ function openModal(projectId, envId) {
   envActiveInput.checked = true;
 
   if (envId) {
-    // Edit mode
     const project = projects.find((p) => p.id === projectId);
     const env = project.environments.find((e) => e.id === envId);
 
@@ -340,7 +319,6 @@ function openModal(projectId, envId) {
     badgeFontColorInput.value = env.badgeFontColor;
     envActiveInput.checked = env.active !== false;
   } else {
-    // Add mode
     modalTitle.textContent = "Add Environment";
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0] && tabs[0].url) {
@@ -353,14 +331,12 @@ function openModal(projectId, envId) {
   envNameInput.focus();
 }
 
-// Close modal
 function closeModal() {
   document.getElementById("envModal").classList.add("hidden");
   editingEnvId = null;
   editingProjectId = null;
 }
 
-// Save environment
 function saveEnvironment() {
   const name = document.getElementById("envName").value.trim();
   const url = document.getElementById("envUrl").value.trim();
@@ -384,7 +360,6 @@ function saveEnvironment() {
     isError = true;
   }
 
-  // Validate URL format
   try {
     new URL(url);
   } catch {
@@ -403,7 +378,6 @@ function saveEnvironment() {
   }
 
   if (editingEnvId) {
-    // Update existing
     const env = project.environments.find((e) => e.id === editingEnvId);
     env.name = name;
     env.url = url;
@@ -412,7 +386,6 @@ function saveEnvironment() {
     env.badgeFontColor = badgeFontColor;
     env.active = active;
   } else {
-    // Add new
     project.environments.push({
       id: Date.now().toString(),
       name: name,
@@ -428,7 +401,6 @@ function saveEnvironment() {
   closeModal();
 }
 
-// Delete environment
 function deleteEnvironment(projectId, envId) {
   if (confirm("Are you sure you want to delete this environment?")) {
     const project = projects.find((p) => p.id === projectId);
@@ -456,14 +428,12 @@ function duplicateEnvironment(projectId, envId) {
   showNotification("Environment duplicated!");
 }
 
-// Save projects to storage
 function saveProjects() {
   chrome.storage.sync.set({ [STORAGE_KEY]: projects }, () => {
     renderProjects();
   });
 }
 
-// Export data
 function exportData() {
   const dataStr = JSON.stringify(projects, null, 2);
   const dataBlob = new Blob([dataStr], { type: "application/json" });
@@ -527,12 +497,10 @@ function downloadSampleData() {
   showNotification("Sample file downloaded!");
 }
 
-// Import data
 function importData() {
   document.getElementById("fileInput").click();
 }
 
-// Handle file import
 function handleFileImport(e) {
   const file = e.target.files[0];
   if (!file) return;
@@ -546,7 +514,6 @@ function handleFileImport(e) {
         throw new Error("Invalid format: expected array of projects");
       }
 
-      // Validate structure
       importedProjects.forEach((p) => {
         if (!p.id || !p.name) {
           throw new Error("Invalid project structure");
@@ -564,7 +531,6 @@ function handleFileImport(e) {
   e.target.value = "";
 }
 
-// Clear all data
 function clearAllData() {
   if (
     confirm(
@@ -577,7 +543,6 @@ function clearAllData() {
   }
 }
 
-// Show notification
 function showNotification(message) {
   const notification = document.createElement("div");
   notification.style.cssText = `
@@ -601,7 +566,6 @@ function showNotification(message) {
   }, 2000);
 }
 
-// Add animation styles
 const style = document.createElement("style");
 style.textContent = `
     @keyframes slideInNotification {

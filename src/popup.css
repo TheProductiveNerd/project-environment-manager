@@ -24,7 +24,6 @@ body {
   background: #f8f9fa;
 }
 
-/* Header */
 .header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -48,7 +47,6 @@ body {
   justify-content: center;
 }
 
-/* Tabs */
 .tabs {
   display: flex;
   gap: 0;
@@ -80,7 +78,6 @@ body {
   border-bottom-color: #667eea;
 }
 
-/* Tab Content */
 .tab-content {
   display: none;
   flex: 1;
@@ -92,7 +89,6 @@ body {
   display: block;
 }
 
-/* Input Fields */
 .input-field {
   width: 100%;
   padding: 11px 14px;
@@ -113,7 +109,6 @@ body {
   color: #999;
 }
 
-/* Buttons */
 .btn {
   padding: 10px 16px;
   border: none;
@@ -191,7 +186,6 @@ body {
   background: #e8e8e8;
 }
 
-/* Add Section */
 .add-section {
   display: flex;
   flex-direction: column;
@@ -209,7 +203,6 @@ body {
   flex-shrink: 0;
 }
 
-/* Projects Container */
 .projects-container {
   display: grid;
   gap: 16px;
@@ -232,9 +225,6 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* margin-bottom: 14px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #f0f0f0; */
   gap: 20px;
 }
 
@@ -287,14 +277,12 @@ body {
   transform: rotate(180deg);
 }
 
-/* Environments */
 .environments {
   display: grid;
   gap: 10px;
   margin-top: 14px;
   padding-top: 12px;
   border-top: 1px solid #f0f0f0;
-  /* margin-bottom: 12px; */
 }
 
 .env-item {
@@ -353,7 +341,6 @@ body {
   background: #f5f5f5;
 }
 
-/* Empty State */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -375,7 +362,6 @@ body {
   color: #666;
 }
 
-/* Settings Section */
 .settings-section {
   display: grid;
   gap: 12px;
@@ -418,7 +404,6 @@ body {
   line-height: 1.4;
 }
 
-/* Modal */
 .modal {
   position: fixed;
   top: 0;
@@ -585,7 +570,6 @@ body {
   justify-content: center;
 }
 
-/* Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -603,7 +587,6 @@ body {
   background: #999;
 }
 
-/* Animations */
 @keyframes pulse {
   0%,
   100% {
