@@ -80,7 +80,7 @@ function init() {
         <button style="background: ${badgeBackgroundColor};" id="pem-floating-btn" type="button">
           <span class="${indicatorClasses}" style="background: ${badgeIndicatorColor}; box-shadow: 0 0 10px ${shadowColor};"></span>
           <span class="pem-label" style="color: ${badgeFontColor};">${matchingEnv.envName}</span>
-          <span class="pem-chevron">▾</span>
+          <span class="pem-chevron" style="color: ${badgeFontColor};">▾</span>
         </button>
         <div id="pem-floating-dropdown">
           <div class="pem-dropdown-header">${matchingEnv.projectName} — ${matchingEnv.envName}</div>
@@ -150,15 +150,21 @@ function init() {
       (env) => env.id !== currentEnvId && env.active !== false,
     );
 
-    otherEnvs.forEach((env) => {
-      fetch(env.url, { method: "HEAD" })
-        .then((response) => {
-          updateEnvironmentStatus(env.id, response.status);
-        })
-        .catch(() => {
-          updateEnvironmentStatus(env.id, "Error");
+    chrome.runtime.sendMessage(
+      {
+        action: "checkEnvStatuses",
+        envs: otherEnvs.map((env) => ({ id: env.id, url: env.url })),
+      },
+      (response) => {
+        if (!response || !response.results) {
+          return;
+        }
+
+        response.results.forEach((result) => {
+          updateEnvironmentStatus(result.id, result.status);
         });
-    });
+      },
+    );
   }
 
   function updateEnvironmentStatus(envId, status) {
@@ -166,8 +172,9 @@ function init() {
       `[data-env-id="${envId}"] .pem-status-badge`,
     );
     if (statusBadge) {
-      statusBadge.textContent = status >= 200 && status < 300 ? "Available" : "Page not found";
-      statusBadge.className = `pem-status-badge ${status >= 200 && status < 300 ? "online" : "offline"}`;
+      const isOnline = typeof status === "number" && status >= 200 && status < 300;
+      statusBadge.textContent = isOnline ? "Available" : "Page not found";
+      statusBadge.className = `pem-status-badge ${isOnline ? "online" : "offline"}`;
     }
   }
 

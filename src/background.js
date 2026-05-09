@@ -26,6 +26,21 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const newUrl = targetUrl + currentPath;
 
     sendResponse({ success: true, newUrl });
+    return;
+  }
+
+  if (request.action === "checkEnvStatuses") {
+    const envs = Array.isArray(request.envs) ? request.envs : [];
+    const statusPromises = envs.map((env) =>
+      checkEnvStatus(env.url)
+        .then((status) => ({ id: env.id, status }))
+        .catch(() => ({ id: env.id, status: "Error" })),
+    );
+
+    Promise.all(statusPromises).then((results) => {
+      sendResponse({ results });
+    });
+    return true;
   }
 });
 
@@ -72,6 +87,14 @@ function normalizeUrl(url) {
 
 function compareUrls(url1, url2) {
   return normalizeUrl(url1).startsWith(normalizeUrl(url2));
+}
+
+async function checkEnvStatus(url) {
+  const response = await fetch(url, {
+    method: "HEAD",
+    redirect: "follow",
+  });
+  return response.status;
 }
 
 function updateBadgeForTabUrl(tabId, url) {
