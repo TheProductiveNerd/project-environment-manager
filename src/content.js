@@ -171,13 +171,23 @@ function init() {
     }
   }
 
+  function normalizeUrl(url) {
+    return url.replace(/^(https?:\/\/)?(www\.)?/, "").replace(/\/$/, "").toLowerCase();
+  }
+
   function switchToEnvironment(targetEnv, matchingEnv) {
     if (!targetEnv) {
       return;
     }
 
+    const currentUrlNormalized = normalizeUrl(window.location.href);
+    const targetUrlNormalized = normalizeUrl(targetEnv.url);
+    const currentEnvNormalized = normalizeUrl(matchingEnv.envUrl);
+    const targetUrl = currentUrlNormalized.replace(currentEnvNormalized, targetUrlNormalized);
+    const urlObj = new URL(targetEnv.url);
+    const finalTargetUrl = urlObj.protocol + "//" + targetUrl;
     try {
-      window.location.href = targetEnv.url;
+      window.location.href = finalTargetUrl;
     } catch (error) {
       console.error("Error switching environment:", error);
       alert("Unable to switch environment. Invalid URL.");

@@ -440,7 +440,7 @@ function exportData() {
   const url = URL.createObjectURL(dataBlob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `project-env-manager-backup-${Date.now()}.json`;
+  link.download = `project-environment-manager-backup-${Date.now()}.json`;
   link.click();
   URL.revokeObjectURL(url);
   showNotification("Data exported successfully!");
@@ -491,7 +491,7 @@ function downloadSampleData() {
   const url = URL.createObjectURL(dataBlob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "project-env-manager-sample.json";
+  link.download = "project-environment-manager-sample.json";
   link.click();
   URL.revokeObjectURL(url);
   showNotification("Sample file downloaded!");
