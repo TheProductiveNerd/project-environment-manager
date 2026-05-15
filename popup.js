@@ -29,9 +29,6 @@ function initializeEventListeners() {
   document
     .getElementById("fileInput")
     .addEventListener("change", handleFileImport);
-  document
-    .getElementById("fileInput")
-    .addEventListener("change", handleFileImport);
 
   document.querySelector(".modal-close").addEventListener("click", closeModal);
   document.getElementById("modalCancel").addEventListener("click", closeModal);
