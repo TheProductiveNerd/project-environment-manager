@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Project Environment Manager",
-  "description": "Manage all your projects and their environments with ease. Detect, display, and switch between environment URLs.",
+  "description": "Project Environment Manager is a Chrome extension that helps users organize, manage, and switch between different environments or contexts without losing their place or workflow.",
   "version": "1.0.0",
   "permissions": ["storage", "activeTab", "scripting", "webNavigation"],
   "host_permissions": ["<all_urls>"],
