@@ -153,6 +153,8 @@ function init() {
     chrome.runtime.sendMessage(
       {
         action: "checkEnvStatuses",
+        url: window.location.href,
+        currentEnv: matchingEnv,
         envs: otherEnvs.map((env) => ({ id: env.id, url: env.url })),
       },
       (response) => {

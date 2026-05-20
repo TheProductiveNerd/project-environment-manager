@@ -30,13 +30,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   if (request.action === "checkEnvStatuses") {
+    const currentUrl = request.url;
     const envs = Array.isArray(request.envs) ? request.envs : [];
-    const statusPromises = envs.map((env) =>
-      checkEnvStatus(env.url)
+    const statusPromises = envs.map((env) => {
+      const targetUrl = currentUrl.replace(request.currentEnv.envUrl, env.url);
+      return checkEnvStatus(targetUrl)
         .then((status) => ({ id: env.id, status }))
-        .catch(() => ({ id: env.id, status: "Error" })),
+        .catch(() => ({ id: env.id, status: "Error" }))
+    }
     );
-
     Promise.all(statusPromises).then((results) => {
       sendResponse({ results });
     });
