@@ -238,6 +238,15 @@ body {
   word-break: break-all;
 }
 
+.project-name > span:nth-child(1) {
+  margin-top: -5px;
+}
+
+.project-name > span:nth-child(2):hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 .project-actions {
   display: flex;
   gap: 8px;
@@ -478,6 +487,7 @@ body {
   font-size: 14px;
   color: #333;
   margin-top: 4px;
+  width: max-content;
 }
 
 .env-meta {

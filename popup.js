@@ -124,7 +124,62 @@ function createProjectCard(project) {
 
   const name = document.createElement("div");
   name.className = "project-name";
-  name.textContent = "📁 " + project.name;
+
+  const nameIcon = document.createElement("span");
+  nameIcon.textContent = "📁 ";
+
+  const nameText = document.createElement("span");
+  nameText.textContent = project.name;
+
+  const renderProjectName = () => {
+    name.innerHTML = "";
+    name.appendChild(nameIcon);
+    name.appendChild(nameText);
+  };
+
+  const editProjectName = () => {
+    const input = document.createElement("input");
+    input.type = "text";
+    input.className = "project-name-input";
+    input.value = project.name;
+    input.style.width = "100%";
+    input.style.boxSizing = "border-box";
+
+    const saveName = () => {
+      const newName = input.value.trim();
+      if (newName) {
+        project.name = newName;
+        saveProjects();
+      }
+      nameText.textContent = project.name;
+      renderProjectName();
+    };
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        input.blur();
+      } else if (e.key === "Escape") {
+        input.value = project.name;
+        input.blur();
+      }
+    });
+
+    input.addEventListener("blur", saveName);
+
+    name.innerHTML = "";
+    name.appendChild(nameIcon);
+    name.appendChild(input);
+    input.focus();
+    input.select();
+  };
+
+  name.addEventListener("click", (e) => {
+    if (e.target.tagName !== "INPUT") {
+      editProjectName();
+    }
+  });
+
+  renderProjectName();
 
   const actions = document.createElement("div");
   actions.className = "project-actions";
