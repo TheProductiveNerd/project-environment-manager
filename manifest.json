@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Project Environment Manager",
   "description": "Organize and switch between project environments effortlessly, so you can stay focused and keep work flowing.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "permissions": ["storage", "activeTab", "webNavigation"],
   "host_permissions": ["<all_urls>"],
   "action": {
