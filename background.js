@@ -119,6 +119,14 @@ function updateBadgeForTabUrl(tabId, url) {
   });
 }
 
+function notifyContentScript(tabId, payload) {
+  chrome.tabs.sendMessage(tabId, payload, (response) => {
+    if (chrome.runtime.lastError) {
+      return;
+    }
+  });
+}
+
 chrome.tabs.onActivated.addListener((activeInfo) => {
   chrome.tabs.get(activeInfo.tabId, (tab) => {
     updateBadgeForTabUrl(activeInfo.tabId, tab?.url);
@@ -134,6 +142,11 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
   if (details.frameId === 0) {
     updateBadgeForTabUrl(details.tabId, details.url);
+    notifyContentScript(details.tabId, {
+      type: "HISTORY_STATE_UPDATED",
+      url: details.url,
+      tabId: details.tabId,
+    });
   }
 });
 
