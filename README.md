@@ -1,10 +1,10 @@
-# Project Environment Manager
+# SafeSwitch
 
 A powerful Chrome extension that helps developers manage and switch between multiple project environments effortlessly.
 
 ## 🎯 Overview
 
-**Project Environment Manager** is a Chrome extension designed to streamline your development workflow. Instead of manually typing URLs or using bookmarks, this extension lets you manage all your project environments in one place and switch between them with a single click.
+**SafeSwitch** is a Chrome extension designed to streamline your development workflow. Instead of manually typing URLs or using bookmarks, this extension lets you manage all your project environments in one place and switch between them with a single click.
 
 Perfect for developers working with multiple environments like Development, Staging, and Production!
 
@@ -65,7 +65,7 @@ When you switch environments:
 ### Status Checking
 The extension automatically checks if other environments are available:
 - ✅ **Available** - Environment is online
-- ❌ **Page not found** - Environment returned an error
+- ❌ **Error** - Environment returned an error
 - ⏳ **Checking** - Status is being verified
 
 ## 🎨 Customization
@@ -179,7 +179,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 👨‍💻 About
 
-**Project Environment Manager** was built to solve a real problem: developers spending too much time manually switching between project environments.
+**SafeSwitch** was built to solve a real problem: developers spending too much time manually switching between project environments.
 
 ### Version
 - Current: 1.0.0

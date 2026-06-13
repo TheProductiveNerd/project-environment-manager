@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Project Environment Manager",
-  "description": "Organize and switch between project environments effortlessly, so you can stay focused and keep work flowing.",
-  "version": "1.0.1",
+  "name": "SafeSwitch",
+  "description": "Context-preserving environment manager with visual safety indicators.",
+  "version": "1.0.2",
   "permissions": ["storage", "activeTab", "webNavigation"],
   "host_permissions": ["<all_urls>"],
   "action": {

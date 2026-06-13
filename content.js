@@ -331,7 +331,7 @@ function init() {
 
     statusBadge.textContent = isOnline
       ? "Available"
-      : "Page not found";
+      : `Error (${status})`;
 
     statusBadge.className = `pem-status-badge ${isOnline ? "online" : "offline"
       }`;

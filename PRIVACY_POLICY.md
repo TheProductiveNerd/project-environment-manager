@@ -1,10 +1,10 @@
 # Privacy Policy
 
-**Project Environment Manager** - Last Updated: May 2026
+**SafeSwitch** - Last Updated: May 2026
 
 ## Overview
 
-Project Environment Manager ("the Extension") is committed to protecting your privacy. This Privacy Policy explains what information the Extension collects, how it uses that information, and your rights.
+SafeSwitch ("the Extension") is committed to protecting your privacy. This Privacy Policy explains what information the Extension collects, how it uses that information, and your rights.
 
 ## Information We Collect
 
