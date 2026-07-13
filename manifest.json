@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "SafeSwitch",
   "description": "Context-preserving environment manager with visual safety indicators.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "permissions": ["storage", "activeTab", "webNavigation"],
   "host_permissions": ["<all_urls>"],
   "action": {
