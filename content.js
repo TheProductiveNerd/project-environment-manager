@@ -337,39 +337,23 @@ function init() {
       }`;
   }
 
-  function normalizeUrl(url) {
-    return url
-      .replace(/^(https?:\/\/)?(www\.)?/, "")
-      .replace(/\/$/, "")
-      .toLowerCase();
-  }
-
   function switchToEnvironment(targetEnv, matchingEnv) {
     if (!targetEnv) {
       return;
     }
 
-    const currentUrlNormalized = normalizeUrl(window.location.href);
-
-    const targetUrlNormalized = normalizeUrl(targetEnv.url);
-
-    const currentEnvNormalized = normalizeUrl(matchingEnv.envUrl);
-
-    const targetUrl = currentUrlNormalized.replace(
-      currentEnvNormalized,
-      targetUrlNormalized,
-    );
-
-    const urlObj = new URL(targetEnv.url);
-
-    const finalTargetUrl =
-      urlObj.protocol + "//" + targetUrl;
-
     try {
-      window.location.href = finalTargetUrl;
+      const currentUrlObj = new URL(window.location.href);
+      const targetUrlObj = new URL(targetEnv.url);
+
+      // Build final URL: target origin + current pathname + query + hash
+      const finalUrl = new URL(
+        `${targetUrlObj.origin}${currentUrlObj.pathname}${currentUrlObj.search}${currentUrlObj.hash}`
+      );
+
+      window.location.href = finalUrl.href;
     } catch (error) {
       console.error("Error switching environment:", error);
-
       alert("Unable to switch environment. Invalid URL.");
     }
   }

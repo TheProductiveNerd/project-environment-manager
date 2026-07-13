@@ -33,12 +33,23 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const currentUrl = request.url;
     const envs = Array.isArray(request.envs) ? request.envs : [];
     const statusPromises = envs.map((env) => {
-      const targetUrl = currentUrl.replace(request.currentEnv.envUrl, env.url);
-      return checkEnvStatus(targetUrl)
-        .then((status) => ({ id: env.id, status }))
-        .catch(() => ({ id: env.id, status: "Error" }))
-    }
-    );
+      try {
+        const currentUrlObj = new URL(currentUrl);
+        const targetUrlObj = new URL(env.url);
+
+        // Build target URL: env origin + current pathname + query + hash
+        const targetUrl = new URL(
+          `${targetUrlObj.origin}${currentUrlObj.pathname}${currentUrlObj.search}${currentUrlObj.hash}`
+        ).href;
+
+        return checkEnvStatus(targetUrl)
+          .then((status) => ({ id: env.id, status }))
+          .catch(() => ({ id: env.id, status: "Error" }));
+      } catch (error) {
+        console.error("Error building target URL:", error);
+        return { id: env.id, status: "Error" };
+      }
+    });
     Promise.all(statusPromises).then((results) => {
       sendResponse({ results });
     });
@@ -155,4 +166,3 @@ chrome.webNavigation.onReferenceFragmentUpdated.addListener((details) => {
     updateBadgeForTabUrl(details.tabId, details.url);
   }
 });
-
